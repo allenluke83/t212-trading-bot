@@ -33,12 +33,12 @@ def main():
     print("\n")
 
     # 2. Get Open Positions (Your Investments)
-    positions = get_data("/equity/positions")
-    if positions:
-        print("--- CURRENT INVESTMENTS ---")
-        for instrument in positions:
-            p = instrument['instrument']
-            #print(f"Ticker: {p['ticker']} | Qty: {p['quantity']} | Current Price: {p['currentPrice']}")
+    # positions = get_data("/equity/positions")
+    # if positions:
+    #     print("--- CURRENT INVESTMENTS ---")
+    #     for instrument in positions:
+    #         p = instrument['instrument']
+    #         #print(f"Ticker: {p['ticker']} | Qty: {p['quantity']} | Current Price: {p['currentPrice']}")
 
 if __name__ == "__main__":
     main()
