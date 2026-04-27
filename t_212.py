@@ -5,7 +5,6 @@ import os
 # Load variables from .env into the system environment
 load_dotenv()
 
-
 class Trading212:
 
     def __init__(self):
@@ -14,6 +13,7 @@ class Trading212:
         self.base_url = "https://live.trading212.com/api/v0"
         self.endpoint = "/equity/account/summary"
 
+    # This function connects to api to get summary
     def get_data(self):
         url = f"{self.base_url}{self.endpoint}"
         response = requests.get(url, auth=(self.api_key, self.api_secret))
