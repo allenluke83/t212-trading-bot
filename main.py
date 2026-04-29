@@ -1,5 +1,6 @@
 from t_212 import Trading212
 from financial_analysis import AnalyseFinance
+from notifications import send_whatsapp
 
 def main():
 
@@ -21,6 +22,11 @@ def main():
 
     # Calculate average and closing amounts
     investment = analysis.get_prices(ticker_symbol = "VWRP.L")
+
+    # Send update to phone
+    send_whatsapp(f"Total reccomended investment: {investment} {summary['currency']}")
+
+    # Auto invest money
 
     print(investment)
 
