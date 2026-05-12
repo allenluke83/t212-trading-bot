@@ -1,6 +1,7 @@
 from t_212 import Trading212
+from trends import TrendAnalyser
 from financial_analysis import AnalyseFinance
-from notifications import send_whatsapp
+from helpers import send_whatsapp
 
 def main():
 
@@ -24,11 +25,13 @@ def main():
     investment = analysis.get_prices(ticker_symbol = "VWRP.L")
 
     # Send update to phone
-    send_whatsapp(f"Total reccomended investment: {investment} {summary['currency']}")
+    #send_whatsapp(f"Total reccomended investment: {investment} {summary['currency']}")
 
-    # Auto invest money
+    # Check any trends
+    trends = TrendAnalyser()
+    hot_stocks = trends.scan_markets_hourly()
+    print(hot_stocks)
 
-    print(investment)
 
 if __name__ == "__main__":
     main()
