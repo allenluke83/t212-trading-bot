@@ -25,12 +25,12 @@ def main():
     investment = analysis.get_prices(ticker_symbol = "VWRP.L")
 
     # Send update to phone
-    #send_whatsapp(f"Total reccomended investment: {investment} {summary['currency']}")
+    #
 
     # Check any trends
     trends = TrendAnalyser()
-    hot_stocks = trends.scan_markets_hourly()
-    print(hot_stocks)
+    # Send the table to phone
+    send_whatsapp("\n         CURRENT TOP TRENDING STOCKS\n" + trends.format_top_stocks(2))
 
 
 if __name__ == "__main__":

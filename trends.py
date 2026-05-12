@@ -59,5 +59,33 @@ class TrendAnalyser:
                 continue
 
         return sorted(trending_hits, key=lambda x: x['change'], reverse=True)
+    
+    def format_top_stocks(self, limit=10):
+
+        stocks = self.scan_markets_hourly()
+
+        if not stocks:
+            return "No stocks met threshold."
+
+        # Create header
+        header = f"{'SYMBOL':<10} I {'CHANGE %':<10} I {'PRICE':<10} I {'VOL SURGE':<10}"
+        divider = "x" * len(header)
+        
+        lines = [header, divider]
+
+        # 2. Slice the list to get the top 10
+        for stock in stocks[:limit]:
+            # <10 means 'left-align within 10 spaces'
+            line = (f"{stock['symbol']:<10} I "
+                    f"{stock['change']:>9}% I " 
+                    f"${stock['price']:<9} I "
+                    f"{stock['vol_surge']:>8}x")
+            lines.append(line)
+
+        return "\n".join(lines)
+
+
+
+
 
     
