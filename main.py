@@ -24,13 +24,15 @@ def main():
     # Calculate average and closing amounts
     investment = analysis.get_prices(ticker_symbol = "VWRP.L")
 
-    # Send update to phone
-    #
-
     # Check any trends
     trends = TrendAnalyser()
+
     # Send the table to phone
-    send_whatsapp("\n         CURRENT TOP TRENDING STOCKS\n" + trends.format_top_stocks(2))
+    send_whatsapp(
+        "CURRENT TOP TRENDING STOCKS\n"
+        + trends.format_top_stocks(threshold=1,
+                                   limit=10)
+        )
 
 
 if __name__ == "__main__":

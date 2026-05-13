@@ -28,6 +28,22 @@ class TrendAnalyser:
             progress=False
         )
 
+        
+        # DO SOMETHING WITH THIS CODE BELOW
+
+        # sma_200_data = yf.download(
+        #     self.tickers, 
+        #     period="2y",
+        #     progress=False
+        # )
+
+        # close_prices = sma_200_data['Close'].copy()
+        # current_price = sma_200_data['Close'].iloc[-1]
+
+        # sma_200_df = close_prices.rolling(window=200).mean().iloc[-1]
+
+        # sma_200_pct = 100 * (current_price - sma_200_df) / sma_200_df
+
         # Iniialise ticker list 
         trending_hits = []
         for ticker in self.tickers:
@@ -38,10 +54,14 @@ class TrendAnalyser:
 
                 # 'Close' is the most recent hourly price
                 current_price = float(ticker_data['Close'].iloc[-1])
-                # Compare to the price 4 hours ago
-                start_price = float(ticker_data['Close'].iloc[-5] )
-
+                # Compare to the average price over previous 4 hours
+                start_price = float(ticker_data['Close'].iloc[-5:-1].median())
                 pct_change = ((current_price - start_price) / start_price) * 100
+
+                # AS ABOVE
+
+                # # Get the percet change in the sma 200
+                # sma_200 = sma_200_pct[ticker]
 
                 # Check Volume Spike (Current hour vs Avg of last 4 hours)
                 current_vol = float(ticker_data['Volume'].iloc[-1])
@@ -53,6 +73,7 @@ class TrendAnalyser:
                         "symbol": ticker,
                         "change": round(pct_change, 2),
                         "price": round(current_price, 2),
+                        #"sma_200": round(sma_200, 2),
                         "vol_surge": round(current_vol / avg_vol, 1)
                     })
             except Exception:
@@ -60,26 +81,25 @@ class TrendAnalyser:
 
         return sorted(trending_hits, key=lambda x: x['change'], reverse=True)
     
-    def format_top_stocks(self, limit=10):
+    def format_top_stocks(self, threshold=2, limit=10):
 
-        stocks = self.scan_markets_hourly()
+        stocks = self.scan_markets_hourly(threshold)
 
         if not stocks:
             return "No stocks met threshold."
 
         # Create header
-        header = f"{'SYMBOL':<10} I {'CHANGE %':<10} I {'PRICE':<10} I {'VOL SURGE':<10}"
-        divider = "x" * len(header)
+        notification = "!! TOP STOCKS !!"
+        header = "SYMBOL/CHANGE %/VOL SURGE"
         
-        lines = [header, divider]
+        lines = [header]
 
         # 2. Slice the list to get the top 10
         for stock in stocks[:limit]:
             # <10 means 'left-align within 10 spaces'
-            line = (f"{stock['symbol']:<10} I "
-                    f"{stock['change']:>9}% I " 
-                    f"${stock['price']:<9} I "
-                    f"{stock['vol_surge']:>8}x")
+            line = (f"{stock['symbol']}/"
+                    f"{stock['change']}%/" 
+                    f"{stock['vol_surge']}")
             lines.append(line)
 
         return "\n".join(lines)

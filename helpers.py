@@ -4,6 +4,7 @@ from datetime import datetime
 import pytz
 import pandas as pd
 import requests
+from io import StringIO
 
 # YCredentials
 PHONE = "447931561806"
@@ -12,7 +13,7 @@ API_KEY = "4662391"
 def send_whatsapp(message):
     """Sends a WhatsApp message via CallMeBot gateway."""
     # Encode the text (converts spaces to %20 so the URL doesn't break)
-    encoded_text = urllib.parse.quote(message)
+    encoded_text = urllib.parse.quote_plus(message)
     
     url = f"https://api.callmebot.com/whatsapp.php?phone={PHONE}&text={encoded_text}&apikey={API_KEY}"
     
@@ -61,7 +62,7 @@ def get_sp500():
 
     # Fetch the page manually first
     response = requests.get(sp500_url, headers=headers)
-    sp500_df = pd.read_html(response.text)[0]
+    sp500_df = pd.read_html(StringIO(response.text))[0]
 
     return sp500_df['Symbol'].str.replace('.', '-', regex=False).tolist()
 
