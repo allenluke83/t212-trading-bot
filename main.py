@@ -2,6 +2,11 @@ from t_212 import Trading212
 from trends import TrendAnalyser
 from financial_analysis import AnalyseFinance
 from helpers import send_whatsapp
+import os
+import sys
+
+# This changes the direrctory when crontab is running
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 def main():
 
